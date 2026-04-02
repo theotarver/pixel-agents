@@ -4,6 +4,7 @@ import { toMajorMinor } from './changelogData.js';
 import { BottomToolbar } from './components/BottomToolbar.js';
 import { ChangelogModal } from './components/ChangelogModal.js';
 import { DebugView } from './components/DebugView.js';
+import { Button } from './components/ui/Button.js';
 import { VersionIndicator } from './components/VersionIndicator.js';
 import { ZoomControls } from './components/ZoomControls.js';
 import { PULSE_ANIMATION_DURATION_SEC } from './constants.js';
@@ -45,46 +46,47 @@ function EditActionBar({
 
   return (
     <div className="absolute top-8 left-1/2 -translate-x-1/2 z-50 flex gap-4 items-center pixel-panel py-4 px-8">
-      <button
-        className={undoDisabled ? 'pixel-action-btn-disabled' : 'pixel-action-btn'}
+      <Button
+        variant={undoDisabled ? 'disabled' : 'default'}
         onClick={undoDisabled ? undefined : editor.handleUndo}
         title="Undo (Ctrl+Z)"
       >
         Undo
-      </button>
-      <button
-        className={redoDisabled ? 'pixel-action-btn-disabled' : 'pixel-action-btn'}
+      </Button>
+      <Button
+        variant={redoDisabled ? 'disabled' : 'default'}
         onClick={redoDisabled ? undefined : editor.handleRedo}
         title="Redo (Ctrl+Y)"
       >
         Redo
-      </button>
-      <button className="pixel-action-btn" onClick={editor.handleSave} title="Save layout">
+      </Button>
+      <Button variant="default" onClick={editor.handleSave} title="Save layout">
         Save
-      </button>
+      </Button>
       {!showResetConfirm ? (
-        <button
-          className="pixel-action-btn"
+        <Button
+          variant="default"
           onClick={() => setShowResetConfirm(true)}
           title="Reset to last saved layout"
         >
           Reset
-        </button>
+        </Button>
       ) : (
         <div className="flex gap-4 items-center">
-          <span className="text-[22px] text-pixel-reset-text">Reset?</span>
-          <button
-            className="pixel-action-btn bg-pixel-danger text-white"
+          <span className="text-base text-reset-text">Reset?</span>
+          <Button
+            variant="default"
+            className="bg-danger text-white"
             onClick={() => {
               setShowResetConfirm(false);
               editor.handleReset();
             }}
           >
             Yes
-          </button>
-          <button className="pixel-action-btn" onClick={() => setShowResetConfirm(false)}>
+          </Button>
+          <Button variant="default" onClick={() => setShowResetConfirm(false)}>
             No
-          </button>
+          </Button>
         </div>
       )}
     </div>
@@ -258,7 +260,7 @@ function App() {
       {/* Vignette overlay */}
       <div
         className="absolute inset-0 pointer-events-none z-[40]"
-        style={{ background: 'var(--pixel-vignette)' }}
+        style={{ background: 'var(--vignette)' }}
       />
 
       <BottomToolbar
@@ -298,7 +300,7 @@ function App() {
 
       {showRotateHint && (
         <div
-          className="absolute left-1/2 -translate-x-1/2 z-[49] bg-pixel-hint text-white text-[20px] py-3 px-8 rounded-none border-2 border-pixel-accent shadow-pixel pointer-events-none whitespace-nowrap"
+          className="absolute left-1/2 -translate-x-1/2 z-[49] bg-hint text-white text-sm py-3 px-8 rounded-none border-2 border-accent shadow-pixel pointer-events-none whitespace-nowrap"
           style={{ top: editor.isDirty ? 52 : 8 }}
         >
           Rotate (R)
@@ -368,21 +370,19 @@ function App() {
             className="pixel-panel py-24 px-32 max-w-[620px] text-center leading-[1.3]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="text-[40px] mb-12 text-pixel-accent">We owe you an apology!</div>
-            <p className="text-[26px] text-pixel-text m-0 mb-12">
+            <div className="text-5xl mb-12 text-accent">We owe you an apology!</div>
+            <p className="text-xl m-0 mb-12">
               We've just migrated to fully open-source assets, all built from scratch with love.
               Unfortunately, this means your previous layout had to be reset.
             </p>
-            <p className="text-[26px] text-pixel-text m-0 mb-12">We're really sorry about that.</p>
-            <p className="text-[26px] text-pixel-text m-0 mb-12">
+            <p className="text-xl m-0 mb-12">We're really sorry about that.</p>
+            <p className="text-xl m-0 mb-12">
               The good news? This was a one-time thing, and it paves the way for some genuinely
               exciting updates ahead.
             </p>
-            <p className="text-[26px] text-pixel-text-dim m-0 mb-20">
-              Stay tuned, and thanks for using Pixel Agents!
-            </p>
+            <p className="text-xl m-0 mb-20">Stay tuned, and thanks for using Pixel Agents!</p>
             <button
-              className="pixel-agents-migration-btn py-6 px-24 pb-8 text-[30px] bg-pixel-accent text-white border-2 border-pixel-accent rounded-none cursor-pointer shadow-pixel"
+              className="pixel-agents-migration-btn py-6 px-24 pb-8 text-3xl bg-accent text-white border-2 border-accent rounded-none cursor-pointer shadow-pixel"
               onClick={() => setMigrationNoticeDismissed(true)}
             >
               Got it

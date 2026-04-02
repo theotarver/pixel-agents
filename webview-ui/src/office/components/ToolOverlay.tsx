@@ -123,9 +123,9 @@ export function ToolOverlay({
 
         let dotColor: string | null = null;
         if (hasPermission) {
-          dotColor = 'var(--color-pixel-status-permission)';
+          dotColor = 'var(--color-status-permission)';
         } else if (isActive && hasActiveTools) {
-          dotColor = 'var(--color-pixel-status-active)';
+          dotColor = 'var(--color-status-active)';
         }
 
         return (
@@ -143,9 +143,7 @@ export function ToolOverlay({
             <div
               className="flex items-center gap-5 pixel-panel whitespace-nowrap max-w-[220px]"
               style={{
-                borderColor: isSelected
-                  ? 'var(--color-pixel-border-light)'
-                  : 'var(--color-pixel-border)',
+                borderColor: isSelected ? 'var(--color-border-light)' : 'var(--color-border)',
                 padding: isSelected ? '3px 6px 3px 8px' : '3px 8px',
               }}
             >
@@ -157,7 +155,7 @@ export function ToolOverlay({
               )}
               <div className="overflow-hidden">
                 <span
-                  className="text-pixel-text overflow-hidden text-ellipsis block"
+                  className="overflow-hidden text-ellipsis block"
                   style={{
                     fontSize: isSub ? '20px' : '22px',
                     fontStyle: isSub ? 'italic' : undefined,
@@ -166,7 +164,7 @@ export function ToolOverlay({
                   {activityText}
                 </span>
                 {ch.folderName && (
-                  <span className="text-[16px] text-pixel-text-dim overflow-hidden text-ellipsis block">
+                  <span className="text-xs overflow-hidden text-ellipsis block">
                     {ch.folderName}
                   </span>
                 )}
@@ -178,7 +176,7 @@ export function ToolOverlay({
                     onCloseAgent(id);
                   }}
                   title="Close agent"
-                  className="bg-none border-none text-pixel-close-text cursor-pointer py-0 px-2 text-[26px] leading-none ml-2 shrink-0 hover:text-pixel-close-hover"
+                  className="bg-none border-none text-close-text cursor-pointer py-0 px-2 text-xl leading-none ml-2 shrink-0 hover:text-close-hover"
                 >
                   ×
                 </button>

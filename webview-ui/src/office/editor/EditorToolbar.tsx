@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { Button } from '../../components/ui/Button.js';
 import { getColorizedSprite } from '../colorize.js';
 import { getColorizedFloorSprite, getFloorPatternCount, hasFloorSprites } from '../floorTiles.js';
 import type { FurnitureCategory, LoadedAssetData } from '../layout/furnitureCatalog.js';
@@ -153,7 +154,7 @@ function ColorSlider({
 }) {
   return (
     <div className="flex items-center gap-4">
-      <span className="text-[20px] text-[#999] w-28 text-right shrink-0">{label}</span>
+      <span className="text-sm text-[#999] w-28 text-right shrink-0">{label}</span>
       <input
         type="range"
         min={min}
@@ -163,7 +164,7 @@ function ColorSlider({
         className="flex-1 h-12"
         style={{ accentColor: 'rgba(90, 140, 255, 0.8)' }}
       />
-      <span className="text-[20px] text-[#999] w-48 text-right shrink-0">{value}</span>
+      <span className="text-sm text-[#999] w-48 text-right shrink-0">{value}</span>
     </div>
   );
 }
@@ -247,7 +248,7 @@ export function EditorToolbar({
   // Wall is TileType 0, floor patterns are 1..patternCount
   const floorPatterns = Array.from({ length: patternCount }, (_, i) => i + 1);
 
-  const thumbSize = 36; // 2x for items
+  const thumbSize = 42; // 2x for items
 
   const isFloorActive = activeTool === EditTool.TILE_PAINT || activeTool === EditTool.EYEDROPPER;
   const isWallActive = activeTool === EditTool.WALL_PAINT;
@@ -256,37 +257,41 @@ export function EditorToolbar({
     activeTool === EditTool.FURNITURE_PLACE || activeTool === EditTool.FURNITURE_PICK;
 
   return (
-    <div className="absolute bottom-68 left-10 z-50 pixel-panel py-6 px-8 flex flex-col-reverse gap-6 max-w-[calc(100vw-20px)]">
+    <div className="absolute bottom-76 left-10 z-40 pixel-panel p-4 flex flex-col-reverse gap-4 max-w-[calc(100vw-20px)]">
       {/* Tool row — at the bottom */}
       <div className="flex gap-4 flex-wrap">
-        <button
-          className={isFloorActive ? 'pixel-editor-btn-active' : 'pixel-editor-btn'}
-          onClick={() => onToolChange(EditTool.TILE_PAINT)}
-          title="Paint floor tiles"
-        >
-          Floor
-        </button>
-        <button
-          className={isWallActive ? 'pixel-editor-btn-active' : 'pixel-editor-btn'}
-          onClick={() => onToolChange(EditTool.WALL_PAINT)}
-          title="Paint walls (click to toggle)"
-        >
-          Wall
-        </button>
-        <button
-          className={isEraseActive ? 'pixel-editor-btn-active' : 'pixel-editor-btn'}
-          onClick={() => onToolChange(EditTool.ERASE)}
-          title="Erase tiles to void"
-        >
-          Erase
-        </button>
-        <button
-          className={isFurnitureActive ? 'pixel-editor-btn-active' : 'pixel-editor-btn'}
+        <Button
+          variant={isFurnitureActive ? 'active' : 'default'}
+          size="md"
           onClick={() => onToolChange(EditTool.FURNITURE_PLACE)}
           title="Place furniture"
         >
           Furniture
-        </button>
+        </Button>
+        <Button
+          variant={isFloorActive ? 'active' : 'default'}
+          size="md"
+          onClick={() => onToolChange(EditTool.TILE_PAINT)}
+          title="Paint floor tiles"
+        >
+          Floor
+        </Button>
+        <Button
+          variant={isWallActive ? 'active' : 'default'}
+          size="md"
+          onClick={() => onToolChange(EditTool.WALL_PAINT)}
+          title="Paint walls (click to toggle)"
+        >
+          Wall
+        </Button>
+        <Button
+          variant={isEraseActive ? 'active' : 'default'}
+          size="md"
+          onClick={() => onToolChange(EditTool.ERASE)}
+          title="Erase tiles to void"
+        >
+          Erase
+        </Button>
       </div>
 
       {/* Sub-panel: Floor tiles — stacked bottom-to-top via column-reverse */}
@@ -294,22 +299,22 @@ export function EditorToolbar({
         <div className="flex flex-col-reverse gap-6">
           {/* Color toggle + Pick — just above tool row */}
           <div className="flex gap-4 items-center">
-            <button
-              className={showColor ? 'pixel-editor-btn-active' : 'pixel-editor-btn'}
+            <Button
+              variant={showColor ? 'active' : 'default'}
+              size="sm"
               onClick={() => setShowColor((v) => !v)}
               title="Adjust floor color"
             >
               Color
-            </button>
-            <button
-              className={
-                activeTool === EditTool.EYEDROPPER ? 'pixel-editor-btn-active' : 'pixel-editor-btn'
-              }
+            </Button>
+            <Button
+              variant={activeTool === EditTool.EYEDROPPER ? 'active' : 'ghost'}
+              size="sm"
               onClick={() => onToolChange(EditTool.EYEDROPPER)}
               title="Pick floor pattern + color from existing tile"
             >
               Pick
-            </button>
+            </Button>
           </div>
 
           {/* Color controls (collapsible) — above Wall/Color/Pick */}
@@ -366,13 +371,14 @@ export function EditorToolbar({
         <div className="flex flex-col-reverse gap-6">
           {/* Color toggle — just above tool row */}
           <div className="flex gap-4 items-center">
-            <button
-              className={showWallColor ? 'pixel-editor-btn-active' : 'pixel-editor-btn'}
+            <Button
+              variant={showWallColor ? 'active' : 'default'}
+              size="sm"
               onClick={() => setShowWallColor((v) => !v)}
               title="Adjust wall color"
             >
               Color
-            </button>
+            </Button>
           </div>
 
           {/* Color controls (collapsible) */}
@@ -432,26 +438,24 @@ export function EditorToolbar({
           {/* Category tabs + Pick — just above tool row */}
           <div className="flex gap-2 flex-wrap items-center">
             {getActiveCategories().map((cat) => (
-              <button
+              <Button
                 key={cat.id}
-                className={activeCategory === cat.id ? 'pixel-tab-active' : 'pixel-tab'}
+                variant={activeCategory === cat.id ? 'active' : 'ghost'}
+                size="sm"
                 onClick={() => setActiveCategory(cat.id)}
               >
                 {cat.label}
-              </button>
+              </Button>
             ))}
             <div className="w-[1px] h-14 bg-white/15 mx-2 shrink-0" />
-            <button
-              className={
-                activeTool === EditTool.FURNITURE_PICK
-                  ? 'pixel-editor-btn-active'
-                  : 'pixel-editor-btn'
-              }
+            <Button
+              variant={activeTool === EditTool.FURNITURE_PICK ? 'active' : 'ghost'}
+              size="sm"
               onClick={() => onToolChange(EditTool.FURNITURE_PICK)}
               title="Pick furniture type from placed item"
             >
               Pick
-            </button>
+            </Button>
           </div>
           {/* Furniture items — single-row horizontal carousel at 2x */}
           <div className="pixel-carousel">
@@ -494,21 +498,23 @@ export function EditorToolbar({
       {selectedFurnitureUid && (
         <div className="flex flex-col-reverse gap-3">
           <div className="flex gap-4 items-center">
-            <button
-              className={showFurnitureColor ? 'pixel-editor-btn-active' : 'pixel-editor-btn'}
+            <Button
+              variant={showFurnitureColor ? 'active' : 'default'}
+              size="sm"
               onClick={() => setShowFurnitureColor((v) => !v)}
               title="Adjust selected furniture color"
             >
               Color
-            </button>
+            </Button>
             {selectedFurnitureColor && (
-              <button
-                className="pixel-editor-btn text-[20px] py-2 px-6"
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => onSelectedFurnitureColorChange(null)}
                 title="Remove color (restore original)"
               >
                 Clear
-              </button>
+              </Button>
             )}
           </div>
           {showFurnitureColor && (
@@ -562,7 +568,7 @@ export function EditorToolbar({
                 max={100}
                 onChange={(v) => handleSelFurnColorChange('c', v)}
               />
-              <label className="flex items-center gap-4 text-[20px] text-[#999] cursor-pointer">
+              <label className="flex items-center gap-4 text-sm text-[#999] cursor-pointer">
                 <input
                   type="checkbox"
                   checked={!!effectiveColor.colorize}

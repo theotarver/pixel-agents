@@ -44,10 +44,7 @@ function ToolDot({ tool }: { tool: ToolActivity }) {
 
 function ToolLine({ tool }: { tool: ToolActivity }) {
   return (
-    <span
-      className="text-[22px] flex items-center gap-5"
-      style={{ opacity: tool.done ? 0.5 : 0.8 }}
-    >
+    <span className="text-base flex items-center gap-5" style={{ opacity: tool.done ? 0.5 : 0.8 }}>
       <ToolDot tool={tool} />
       {tool.permissionWait && !tool.done ? 'Needs approval' : tool.status}
     </span>
@@ -119,7 +116,7 @@ export function DebugView({
         <span className="inline-flex items-center gap-0">
           <button
             onClick={() => onSelectAgent(id)}
-            className="rounded-none py-6 px-10 text-[26px]"
+            className="rounded-none py-6 px-10 text-xl"
             style={{
               background: isSelected ? 'rgba(90, 140, 255, 0.25)' : undefined,
               color: isSelected ? '#fff' : undefined,
@@ -130,7 +127,7 @@ export function DebugView({
           </button>
           <button
             onClick={() => vscode.postMessage({ type: 'closeAgent', id })}
-            className="rounded-none py-6 px-8 text-[26px] opacity-70"
+            className="rounded-none py-6 px-8 text-xl opacity-70"
             style={{
               background: isSelected ? 'rgba(90, 140, 255, 0.25)' : undefined,
               color: isSelected ? '#fff' : undefined,
@@ -160,7 +157,7 @@ export function DebugView({
               </div>
             ))}
             {status === 'waiting' && !hasActiveTools && (
-              <span className="text-[22px] opacity-85 flex items-center gap-5">
+              <span className="text-base opacity-85 flex items-center gap-5">
                 <span
                   className="w-6 h-6 rounded-full inline-block shrink-0"
                   style={{ background: 'var(--vscode-charts-yellow, #cca700)' }}
@@ -173,7 +170,7 @@ export function DebugView({
         {/* Connection diagnostics */}
         {diag && (
           <div
-            className="mt-6 py-4 px-6 text-[18px] opacity-70 flex flex-col gap-2"
+            className="mt-6 py-4 px-6 text-2xs opacity-70 flex flex-col gap-2"
             style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
           >
             <span>
@@ -185,14 +182,14 @@ export function DebugView({
               {' | '}
               Last data: {formatTimeAgo(diag.lastDataAt)}
             </span>
-            <span className="opacity-60 text-[16px] break-all">{diag.jsonlFile}</span>
+            <span className="opacity-60 text-xs break-all">{diag.jsonlFile}</span>
             {!diag.projectDirExists && (
-              <span className="text-[16px]" style={{ color: '#f14c4c' }}>
+              <span className="text-xs" style={{ color: '#f14c4c' }}>
                 Project dir does not exist: {diag.projectDir}
               </span>
             )}
             {diag.jsonlExists && diag.fileSize > 0 && diag.linesProcessed === 0 && (
-              <span className="text-[16px]" style={{ color: '#cca700' }}>
+              <span className="text-xs" style={{ color: '#cca700' }}>
                 File has data ({diag.fileSize} bytes) but 0 lines parsed. Possible format issue.
               </span>
             )}
@@ -208,7 +205,7 @@ export function DebugView({
       style={{ background: 'var(--vscode-editor-background)', zIndex: DEBUG_Z }}
     >
       {/* Top padding so cards don't overlap the floating toolbar */}
-      <div className="p-12 text-[28px]">
+      <div className="p-12 text-2xl">
         <div className="flex flex-col gap-6">{agents.map(renderAgentCard)}</div>
       </div>
     </div>

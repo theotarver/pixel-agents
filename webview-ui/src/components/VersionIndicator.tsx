@@ -69,24 +69,24 @@ export function VersionIndicator({
           }}
         >
           <div className="flex justify-between items-end gap-10">
-            <span className="text-[24px] text-pixel-accent leading-[0.5]">
+            <span className="text-lg text-accent leading-[0.5]">
               Updated to v{currentMajorMinor}!
             </span>
             <button
               onClick={handleDismiss}
-              className="bg-transparent border-none rounded-none text-pixel-text-muted text-[22px] cursor-pointer px-2 leading-[0.8] ml-4 shrink-0"
+              className="bg-transparent border-none rounded-none text-text-muted text-base cursor-pointer px-2 leading-[0.8] ml-4 shrink-0"
             >
               x
             </button>
           </div>
-          <span className="text-[20px] text-pixel-text-dim whitespace-nowrap">See what's new</span>
+          <span className="text-sm whitespace-nowrap">See what's new</span>
         </div>
       )}
       {/* Hover tooltip — "See what's new" appears on label hover after notice is gone */}
       {!showUpdateNotice && labelHovered && (
         <div
           onClick={handleOpenChangelog}
-          className="absolute bottom-28 right-28 z-[45] pixel-panel py-6 px-12 cursor-pointer text-[20px] text-pixel-text-dim whitespace-nowrap"
+          className="absolute bottom-28 right-28 z-[45] pixel-panel py-6 px-12 cursor-pointer text-sm whitespace-nowrap"
         >
           See what's new!
         </div>
@@ -96,7 +96,7 @@ export function VersionIndicator({
         onMouseEnter={() => setLabelHovered(true)}
         onMouseLeave={() => setLabelHovered(false)}
         onClick={handleOpenChangelog}
-        className="absolute bottom-8 right-28 z-[45] text-[24px] text-pixel-text-dim cursor-pointer select-none pr-2 transition-opacity duration-200"
+        className="absolute bottom-8 right-28 z-[45] text-lg cursor-pointer select-none pr-2 transition-opacity duration-200"
         style={{ opacity: labelHovered ? 0.8 : 0.4 }}
       >
         v{currentMajorMinor}

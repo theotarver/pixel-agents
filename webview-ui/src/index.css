@@ -8,67 +8,101 @@
   src: url('/fonts/FSPixelSansUnicode-Regular.ttf') format('truetype');
 }
 
-@theme {
+:root {
+  /* Core palette */
+  --color-bg: #1e1e2e;
+  --color-bg-dark: #181828;
+  --color-bg-thumb: #2a2a3a;
+  --color-border: #4a4a6a;
+  --color-border-light: #6a6a8a;
+  --color-accent: #6030ff;
+  --color-accent-bright: #746fff;
+  --color-green: #5ac88c;
+
+  /* Text */
+  --color-text: rgba(255, 255, 255, 0.9);
+  --color-text-muted: rgba(255, 255, 255, 0.5);
+
+  /* Buttons */
+  --color-btn-bg: rgba(255, 255, 255, 0.08);
+  --color-btn-hover: rgba(255, 255, 255, 0.15);
+  --color-active-bg: rgba(93, 90, 255, 0.25);
+
+  /* Close button */
+  --color-close-text: rgba(255, 255, 255, 0.5);
+  --color-close-hover: #e55;
+
+  /* Semantic */
+  --color-hint: #3278c8;
+  --color-reset-text: #ecc;
+  --color-danger: #a33;
+  --color-warning: #f59e0b;
+  --color-accent-80: rgba(90, 140, 255, 0.8);
+
+  /* Status */
+  --color-status-permission: #cca700;
+  --color-status-active: #3794ff;
+
+  /* Shadow */
+  --shadow-pixel: 2px 2px 0px #0a0a14;
+
+  /* Non-utility values */
+  --vignette: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
+  --btn-disabled-opacity: 0.35;
+}
+
+@theme inline {
   /* 1px base so Tailwind spacing maps directly to pixels (pixel-art project) */
   --spacing: 1px;
 
   --font-pixel: 'FS Pixel Sans', sans-serif;
 
-  /* Core palette */
-  --color-pixel-bg: #1e1e2e;
-  --color-pixel-bg-dark: #181828;
-  --color-pixel-bg-thumb: #2a2a3a;
-  --color-pixel-border: #4a4a6a;
-  --color-pixel-border-light: #6a6a8a;
-  --color-pixel-accent: #5a8cff;
-  --color-pixel-green: #5ac88c;
+  /* Text sizes (pixel-art scale, base = 22px) */
+  --text-*: initial;
+  --text-xs: 16px;
+  --text-2xs: 18px;
+  --text-sm: 20px;
+  --text-base: 22px;
+  --text-lg: 26px;
+  --text-xl: 30px;
+  --text-2xl: 36px;
+  --text-3xl: 44px;
+  --text-4xl: 52px;
+  --text-5xl: 64px;
 
-  /* Text */
-  --color-pixel-text: rgba(255, 255, 255, 0.8);
-  --color-pixel-text-dim: rgba(255, 255, 255, 0.7);
-  --color-pixel-text-muted: rgba(255, 255, 255, 0.5);
-  --color-pixel-text-bright: rgba(255, 255, 255, 0.9);
-
-  /* Buttons */
-  --color-pixel-btn-bg: rgba(255, 255, 255, 0.08);
-  --color-pixel-btn-hover: rgba(255, 255, 255, 0.15);
-  --color-pixel-active-bg: rgba(90, 140, 255, 0.25);
-
-  /* Agent button */
-  --color-pixel-agent-bg: rgba(90, 200, 140, 0.15);
-  --color-pixel-agent-hover: rgba(90, 200, 140, 0.3);
-  --color-pixel-agent-border: #5ac88c;
-  --color-pixel-agent-text: rgba(200, 255, 220, 0.95);
-
-  /* Close button */
-  --color-pixel-close-text: rgba(255, 255, 255, 0.5);
-  --color-pixel-close-hover: #e55;
-
-  /* Semantic */
-  --color-pixel-hint: #3278c8;
-  --color-pixel-reset-text: #ecc;
-  --color-pixel-danger: #a33;
-  --color-pixel-warning: #f59e0b;
-  --color-pixel-accent-80: rgba(90, 140, 255, 0.8);
-
-  /* Status */
-  --color-pixel-status-permission: #cca700;
-  --color-pixel-status-active: #3794ff;
+  /* Colors — reference :root vars so VS Code shows swatches */
+  --color-bg: var(--color-bg);
+  --color-bg-dark: var(--color-bg-dark);
+  --color-bg-thumb: var(--color-bg-thumb);
+  --color-border: var(--color-border);
+  --color-border-light: var(--color-border-light);
+  --color-accent: var(--color-accent);
+  --color-green: var(--color-green);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-btn-bg: var(--color-btn-bg);
+  --color-btn-hover: var(--color-btn-hover);
+  --color-active-bg: var(--color-active-bg);
+  --color-accent-bright: var(--color-accent-bright);
+  --color-close-text: var(--color-close-text);
+  --color-close-hover: var(--color-close-hover);
+  --color-hint: var(--color-hint);
+  --color-reset-text: var(--color-reset-text);
+  --color-danger: var(--color-danger);
+  --color-warning: var(--color-warning);
+  --color-accent-80: var(--color-accent-80);
+  --color-status-permission: var(--color-status-permission);
+  --color-status-active: var(--color-status-active);
 
   /* Shadow */
-  --shadow-pixel: 2px 2px 0px #0a0a14;
-}
-
-:root {
-  --pixel-vignette: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, 0.6) 100%);
-  --pixel-btn-disabled-opacity: 0.35;
+  --shadow-pixel: var(--shadow-pixel);
 }
 
 @layer base {
   html,
   body,
   #root {
-    @apply m-0 w-full h-full overflow-hidden font-pixel;
+    @apply m-0 w-full h-full overflow-hidden font-pixel text-base text-text;
   }
 
   * {
@@ -79,98 +113,21 @@
 @layer components {
   /* Panel with standard pixel-art border + shadow */
   .pixel-panel {
-    @apply bg-pixel-bg border-2 border-pixel-border rounded-none shadow-pixel;
+    @apply bg-bg border-2 border-border rounded-none shadow-pixel;
   }
 
-  /* Base button */
-  .pixel-btn {
-    @apply py-[5px] px-10 text-[22px] text-pixel-text bg-pixel-btn-bg border-2 border-transparent rounded-none cursor-pointer hover:bg-pixel-btn-hover;
-  }
-
-  /* Active/selected button */
-  .pixel-btn-active {
-    @apply py-[5px] px-10 text-[22px] text-pixel-text bg-pixel-active-bg border-2 border-pixel-accent rounded-none cursor-pointer;
-  }
-
-  /* Small editor button */
-  .pixel-editor-btn {
-    @apply py-[3px] px-8 text-[22px] text-pixel-text-dim bg-pixel-btn-bg border-2 border-transparent rounded-none cursor-pointer hover:bg-pixel-btn-hover;
-  }
-
-  .pixel-editor-btn-active {
-    @apply py-[3px] px-8 text-[22px] text-pixel-text-bright bg-pixel-active-bg border-2 border-pixel-accent rounded-none cursor-pointer;
-  }
-
-  /* Tab button */
-  .pixel-tab {
-    @apply py-2 px-6 text-[20px] text-pixel-text-muted bg-transparent border-2 border-transparent rounded-none cursor-pointer hover:bg-pixel-btn-bg;
-  }
-
-  .pixel-tab-active {
-    @apply py-2 px-6 text-[20px] text-pixel-text bg-pixel-btn-bg border-2 border-pixel-accent rounded-none cursor-pointer;
-  }
-
-  /* Settings menu item */
-  .pixel-menu-item {
-    @apply flex items-center justify-between w-full py-6 px-10 text-[24px] text-pixel-text bg-transparent border-none rounded-none cursor-pointer text-left hover:bg-pixel-btn-bg;
-  }
-
-  /* Dark modal backdrop */
-  .pixel-backdrop {
-    @apply fixed inset-0 bg-black/50;
-  }
-
-  /* Centered modal */
-  .pixel-modal {
-    @apply fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-pixel-bg border-2 border-pixel-border rounded-none shadow-pixel p-4;
-  }
-
-  /* Modal header row */
-  .pixel-modal-header {
-    @apply flex items-center justify-between py-4 px-10 border-b border-pixel-border mb-4;
-  }
-
-  /* Close (X) button */
-  .pixel-close-btn {
-    @apply bg-transparent border-none rounded-none text-pixel-text-muted text-[24px] cursor-pointer px-4 leading-none hover:bg-pixel-btn-bg;
-  }
-
-  /* Custom checkbox indicator */
-  .pixel-checkbox {
-    @apply w-14 h-14 border-2 border-white/50 rounded-none shrink-0 flex items-center justify-center text-[12px] leading-none text-white;
-  }
-
-  /* Action bar button (edit mode top bar) */
-  .pixel-action-btn {
-    @apply py-4 px-10 text-[22px] text-pixel-text-dim bg-pixel-btn-bg border-2 border-transparent rounded-none cursor-pointer hover:bg-pixel-btn-hover;
-  }
-
-  .pixel-action-btn-disabled {
-    @apply py-4 px-10 text-[22px] text-pixel-text-dim bg-pixel-btn-bg border-2 border-transparent rounded-none cursor-default opacity-[var(--pixel-btn-disabled-opacity)];
-  }
-
-  /* Dropdown menu panel (folder picker, bypass menu) */
-  .pixel-dropdown {
-    @apply absolute bottom-full left-0 mb-4 bg-pixel-bg border-2 border-pixel-border rounded-none shadow-pixel p-4 z-50;
-  }
-
-  /* Dropdown menu button */
-  .pixel-dropdown-item {
-    @apply block w-full text-left py-6 px-10 text-[24px] text-pixel-text bg-transparent border-none rounded-none cursor-pointer whitespace-nowrap hover:bg-pixel-btn-bg;
-  }
-
-  /* Color control panel */
+  /* Color control panel (editor-specific) */
   .pixel-color-panel {
-    @apply flex flex-col gap-3 py-4 px-6 bg-pixel-bg-dark border-2 border-pixel-border rounded-none;
+    @apply flex flex-col gap-3 py-4 px-6 bg-bg-dark border-2 border-border rounded-none;
   }
 
   /* Thumbnail button (floor/wall/furniture previews) */
   .pixel-thumb-btn {
-    @apply p-0 rounded-none cursor-pointer overflow-hidden shrink-0 bg-pixel-bg-thumb border-2 border-pixel-border;
+    @apply p-0 rounded-none cursor-pointer overflow-hidden shrink-0 bg-bg-thumb border-2 border-border;
   }
 
   .pixel-thumb-btn-selected {
-    @apply p-0 rounded-none cursor-pointer overflow-hidden shrink-0 bg-pixel-bg-thumb border-2 border-pixel-accent;
+    @apply p-0 rounded-none cursor-pointer overflow-hidden shrink-0 bg-bg-thumb border-2 border-accent;
   }
 
   /* Horizontal carousel for editor items */

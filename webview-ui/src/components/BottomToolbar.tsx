@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import type { WorkspaceFolder } from '../hooks/useExtensionMessages.js';
 import { vscode } from '../vscodeApi.js';
 import { SettingsModal } from './SettingsModal.js';
+import { Button } from './ui/Button.js';
+import { Dropdown, DropdownItem } from './ui/Dropdown.js';
 
 interface BottomToolbarProps {
   isEditMode: boolean;
@@ -34,8 +36,6 @@ export function BottomToolbar({
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isFolderPickerOpen, setIsFolderPickerOpen] = useState(false);
   const [isBypassMenuOpen, setIsBypassMenuOpen] = useState(false);
-  const [hoveredFolder, setHoveredFolder] = useState<number | null>(null);
-  const [hoveredBypass, setHoveredBypass] = useState<number | null>(null);
   const folderPickerRef = useRef<HTMLDivElement>(null);
   const pendingBypassRef = useRef(false);
 
@@ -88,80 +88,52 @@ export function BottomToolbar({
   };
 
   return (
-    <div className="absolute bottom-10 left-10 z-50 flex items-center gap-4 pixel-panel py-4 px-6">
+    <div className="absolute bottom-10 left-10 z-50 flex items-center gap-4 pixel-panel p-4">
       <div ref={folderPickerRef} className="relative">
-        <button
+        <Button
+          variant="accent"
           onClick={handleAgentClick}
           onContextMenu={handleAgentRightClick}
-          className={`pixel-btn py-[5px] px-12 border-2 border-pixel-agent-border text-pixel-agent-text ${
+          className={
             isFolderPickerOpen || isBypassMenuOpen
-              ? 'bg-pixel-agent-hover'
-              : 'bg-pixel-agent-bg hover:bg-pixel-agent-hover'
-          }`}
+              ? 'bg-accent-bright'
+              : 'bg-accent hover:bg-accent-bright'
+          }
         >
           + Agent
-        </button>
-        {isBypassMenuOpen && (
-          <div className="pixel-dropdown min-w-[180px]">
-            <button
-              onClick={() => handleBypassSelect(false)}
-              onMouseEnter={() => setHoveredBypass(0)}
-              onMouseLeave={() => setHoveredBypass(null)}
-              className="pixel-dropdown-item"
-              style={{
-                background: hoveredBypass === 0 ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-              }}
+        </Button>
+        <Dropdown isOpen={isBypassMenuOpen}>
+          <DropdownItem onClick={() => handleBypassSelect(true)} className="text-warning">
+            <span className="text-[12px]">⚡</span> Bypass Permissions
+          </DropdownItem>
+        </Dropdown>
+        <Dropdown isOpen={isFolderPickerOpen} className="min-w-[160px]">
+          {workspaceFolders.map((folder) => (
+            <DropdownItem
+              key={folder.path}
+              onClick={() => handleFolderSelect(folder)}
+              className="text-base"
             >
-              Normal
-            </button>
-            <div className="h-[1px] my-4 bg-pixel-border" />
-            <button
-              onClick={() => handleBypassSelect(true)}
-              onMouseEnter={() => setHoveredBypass(1)}
-              onMouseLeave={() => setHoveredBypass(null)}
-              className="pixel-dropdown-item text-pixel-warning"
-              style={{
-                background: hoveredBypass === 1 ? 'rgba(255, 255, 255, 0.08)' : 'transparent',
-              }}
-            >
-              <span className="text-[16px]">⚡</span> Bypass Permissions
-            </button>
-          </div>
-        )}
-        {isFolderPickerOpen && (
-          <div className="pixel-dropdown min-w-[160px]">
-            {workspaceFolders.map((folder, i) => (
-              <button
-                key={folder.path}
-                onClick={() => handleFolderSelect(folder)}
-                onMouseEnter={() => setHoveredFolder(i)}
-                onMouseLeave={() => setHoveredFolder(null)}
-                className="pixel-dropdown-item text-[22px]"
-                style={{
-                  background: hoveredFolder === i ? 'rgba(255, 255, 255, 0.15)' : 'transparent',
-                }}
-              >
-                {folder.name}
-              </button>
-            ))}
-          </div>
-        )}
+              {folder.name}
+            </DropdownItem>
+          ))}
+        </Dropdown>
       </div>
-      <button
+      <Button
+        variant={isEditMode ? 'active' : 'default'}
         onClick={onToggleEditMode}
-        className={isEditMode ? 'pixel-btn-active' : 'pixel-btn'}
         title="Edit office layout"
       >
         Layout
-      </button>
+      </Button>
       <div className="relative">
-        <button
+        <Button
+          variant={isSettingsOpen ? 'active' : 'default'}
           onClick={() => setIsSettingsOpen((v) => !v)}
-          className={isSettingsOpen ? 'pixel-btn-active' : 'pixel-btn'}
           title="Settings"
         >
           Settings
-        </button>
+        </Button>
         <SettingsModal
           isOpen={isSettingsOpen}
           onClose={() => setIsSettingsOpen(false)}
