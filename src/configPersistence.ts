@@ -6,10 +6,12 @@ import { CONFIG_FILE_NAME, LAYOUT_FILE_DIR } from './constants.js';
 
 export interface PixelAgentsConfig {
   externalAssetDirectories: string[];
+  theme: string;
 }
 
 const DEFAULT_CONFIG: PixelAgentsConfig = {
   externalAssetDirectories: [],
+  theme: 'default',
 };
 
 function getConfigFilePath(): string {
@@ -26,6 +28,7 @@ export function readConfig(): PixelAgentsConfig {
       externalAssetDirectories: Array.isArray(parsed.externalAssetDirectories)
         ? parsed.externalAssetDirectories.filter((d): d is string => typeof d === 'string')
         : [],
+      theme: typeof parsed.theme === 'string' ? parsed.theme : 'default',
     };
   } catch (err) {
     console.error('[Pixel Agents] Failed to read config file:', err);

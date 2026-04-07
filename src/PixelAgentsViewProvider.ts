@@ -248,6 +248,7 @@ export class PixelAgentsViewProvider implements vscode.WebviewViewProvider {
           watchAllSessions,
           alwaysShowLabels,
           externalAssetDirectories: config.externalAssetDirectories,
+          theme: config.theme,
         });
 
         // Send workspace folders to webview (only when multi-root)
@@ -374,22 +375,27 @@ export class PixelAgentsViewProvider implements vscode.WebviewViewProvider {
             // Load bundled default layout
             this.defaultLayout = loadDefaultLayout(assetsRoot);
 
-            // Load character sprites
-            const charSprites = await loadCharacterSprites(assetsRoot);
+            // Read theme from config
+            const themeConfig = readConfig();
+            const theme = themeConfig.theme;
+            console.log(`[Extension] Active theme: ${theme}`);
+
+            // Load character sprites (themed)
+            const charSprites = await loadCharacterSprites(assetsRoot, theme);
             if (charSprites && this.webview) {
               console.log('[Extension] Character sprites loaded, sending to webview');
               sendCharacterSpritesToWebview(this.webview, charSprites);
             }
 
-            // Load floor tiles
-            const floorTiles = await loadFloorTiles(assetsRoot);
+            // Load floor tiles (themed)
+            const floorTiles = await loadFloorTiles(assetsRoot, theme);
             if (floorTiles && this.webview) {
               console.log('[Extension] Floor tiles loaded, sending to webview');
               sendFloorTilesToWebview(this.webview, floorTiles);
             }
 
-            // Load wall tiles
-            const wallTiles = await loadWallTiles(assetsRoot);
+            // Load wall tiles (themed)
+            const wallTiles = await loadWallTiles(assetsRoot, theme);
             if (wallTiles && this.webview) {
               console.log('[Extension] Wall tiles loaded, sending to webview');
               sendWallTilesToWebview(this.webview, wallTiles);
@@ -488,6 +494,23 @@ export class PixelAgentsViewProvider implements vscode.WebviewViewProvider {
           type: 'externalAssetDirectoriesUpdated',
           dirs: cfg.externalAssetDirectories,
         });
+      } else if (message.type === 'setTheme') {
+        const newTheme = (message.theme as string) || 'default';
+        const cfg = readConfig();
+        cfg.theme = newTheme;
+        writeConfig(cfg);
+        console.log(`[Extension] Theme changed to: ${newTheme}`);
+        // Reload all themed assets
+        if (this.assetsRoot && this.webview) {
+          const charSprites = await loadCharacterSprites(this.assetsRoot, newTheme);
+          if (charSprites) sendCharacterSpritesToWebview(this.webview, charSprites);
+          const floorTiles = await loadFloorTiles(this.assetsRoot, newTheme);
+          if (floorTiles) sendFloorTilesToWebview(this.webview, floorTiles);
+          const wallTiles = await loadWallTiles(this.assetsRoot, newTheme);
+          if (wallTiles) sendWallTilesToWebview(this.webview, wallTiles);
+          const assets = await this.loadAllFurnitureAssets();
+          if (assets) sendAssetsToWebview(this.webview, assets);
+        }
       } else if (message.type === 'importLayout') {
         const uris = await vscode.window.showOpenDialog({
           filters: { 'JSON Files': ['json'] },
@@ -584,11 +607,12 @@ export class PixelAgentsViewProvider implements vscode.WebviewViewProvider {
 
   private async loadAllFurnitureAssets(): Promise<LoadedAssets | null> {
     if (!this.assetsRoot) return null;
-    let assets = await loadFurnitureAssets(this.assetsRoot);
     const config = readConfig();
+    const theme = config.theme;
+    let assets = await loadFurnitureAssets(this.assetsRoot, theme);
     for (const extraDir of config.externalAssetDirectories) {
       console.log('[Extension] Loading external assets from:', extraDir);
-      const extra = await loadFurnitureAssets(extraDir);
+      const extra = await loadFurnitureAssets(extraDir, theme);
       if (extra) {
         assets = assets ? mergeLoadedAssets(assets, extra) : extra;
       }

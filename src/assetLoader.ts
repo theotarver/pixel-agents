@@ -30,6 +30,23 @@ import { LAYOUT_REVISION_KEY } from './constants.js';
 
 export type { FurnitureAsset };
 
+// ── Theme helpers ───────────────────────────────────────────────
+/**
+ * Resolve a themed asset subdirectory. If theme is set and a themed directory
+ * exists (e.g. "characters-lab"), use it. Otherwise fall back to the default
+ * (e.g. "characters").
+ */
+function resolveThemedDir(assetsRoot: string, subdir: string, theme?: string): string {
+  if (theme && theme !== 'default') {
+    const themed = path.join(assetsRoot, 'assets', `${subdir}-${theme}`);
+    if (fs.existsSync(themed)) {
+      console.log(`[AssetLoader] Using themed ${subdir}: ${subdir}-${theme}`);
+      return themed;
+    }
+  }
+  return path.join(assetsRoot, 'assets', subdir);
+}
+
 export interface LoadedAssets {
   catalog: FurnitureAsset[];
   sprites: Map<string, string[][]>; // assetId -> SpriteData
@@ -47,10 +64,13 @@ export function mergeLoadedAssets(a: LoadedAssets, b: LoadedAssets): LoadedAsset
 /**
  * Load furniture assets from per-folder manifests
  */
-export async function loadFurnitureAssets(workspaceRoot: string): Promise<LoadedAssets | null> {
+export async function loadFurnitureAssets(
+  workspaceRoot: string,
+  theme?: string,
+): Promise<LoadedAssets | null> {
   try {
     console.log(`[AssetLoader] workspaceRoot received: "${workspaceRoot}"`);
-    const furnitureDir = path.join(workspaceRoot, 'assets', 'furniture');
+    const furnitureDir = resolveThemedDir(workspaceRoot, 'furniture', theme);
     console.log(`[AssetLoader] Scanning furniture directory: ${furnitureDir}`);
 
     if (!fs.existsSync(furnitureDir)) {
@@ -251,9 +271,12 @@ export interface LoadedWallTiles {
  * Each file is named wall_N.png (e.g. wall_0.png, wall_1.png, ...).
  * Files are loaded in numeric order; each PNG is a 64×128 grid of 16 bitmask pieces.
  */
-export async function loadWallTiles(assetsRoot: string): Promise<LoadedWallTiles | null> {
+export async function loadWallTiles(
+  assetsRoot: string,
+  theme?: string,
+): Promise<LoadedWallTiles | null> {
   try {
-    const wallsDir = path.join(assetsRoot, 'assets', 'walls');
+    const wallsDir = resolveThemedDir(assetsRoot, 'walls', theme);
     if (!fs.existsSync(wallsDir)) {
       console.log('[AssetLoader] No walls/ directory found at:', wallsDir);
       return null;
@@ -318,9 +341,12 @@ export interface LoadedFloorTiles {
  * Each file is named floor_N.png (e.g. floor_0.png, floor_1.png, ...).
  * Files are loaded in numeric order; each PNG is a 16×16 grayscale tile.
  */
-export async function loadFloorTiles(assetsRoot: string): Promise<LoadedFloorTiles | null> {
+export async function loadFloorTiles(
+  assetsRoot: string,
+  theme?: string,
+): Promise<LoadedFloorTiles | null> {
   try {
-    const floorsDir = path.join(assetsRoot, 'assets', 'floors');
+    const floorsDir = resolveThemedDir(assetsRoot, 'floors', theme);
     if (!fs.existsSync(floorsDir)) {
       console.log('[AssetLoader] No floors/ directory found at:', floorsDir);
       return null;
@@ -390,9 +416,10 @@ export interface LoadedCharacterSprites {
  */
 export async function loadCharacterSprites(
   assetsRoot: string,
+  theme?: string,
 ): Promise<LoadedCharacterSprites | null> {
   try {
-    const charDir = path.join(assetsRoot, 'assets', 'characters');
+    const charDir = resolveThemedDir(assetsRoot, 'characters', theme);
     const characters: CharacterDirectionSprites[] = [];
 
     for (let ci = 0; ci < CHAR_COUNT; ci++) {

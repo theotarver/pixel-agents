@@ -1,0 +1,13 @@
+{
+  "id": "PIPETTE_RACK",
+  "name": "Pipette Rack",
+  "category": "decor",
+  "type": "asset",
+  "canPlaceOnWalls": false,
+  "canPlaceOnSurfaces": true,
+  "backgroundTiles": 0,
+  "width": 16,
+  "height": 32,
+  "footprintW": 1,
+  "footprintH": 2
+}
